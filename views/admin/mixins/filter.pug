@@ -1,0 +1,6 @@
+mixin filter(listFilter)
+    each item in listFilter
+        button(
+            class=`btn btn-sm ms-1 btn-outline-success ${item.isQuery}`
+            button-status= `${item.status}`
+            ) #{item.name}
