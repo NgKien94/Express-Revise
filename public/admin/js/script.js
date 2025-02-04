@@ -7,6 +7,10 @@ if (listButton.length > 0) {
         item.addEventListener('click', (e) => {
             let url = new URL(location.href)
             const status = e.target.getAttribute('button-status');
+            const currentPage = url.searchParams.get('page');
+            if(currentPage){
+                url.searchParams.delete('page'); // Khi click vào status thì xóa đi page cũ đi
+            }
 
             if (status) {
                 url.searchParams.set('status', status);
@@ -45,3 +49,22 @@ formSearch.addEventListener('submit', (e) => {
 })
 
 //End Search
+
+
+// Pagination
+const listBtnPagination = document.querySelectorAll('[button-pagination]');
+listBtnPagination.forEach((item) => {
+    
+    item.addEventListener('click', (e) => {
+        let url = new URL(location.href);
+        const destinationPage = item.getAttribute('button-pagination');
+        
+        
+
+        url.searchParams.set('page', destinationPage);
+        
+
+        location.href = url.href;
+    })
+})
+//End pagination
