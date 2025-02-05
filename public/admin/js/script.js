@@ -8,7 +8,7 @@ if (listButton.length > 0) {
             let url = new URL(location.href)
             const status = e.target.getAttribute('button-status');
             const currentPage = url.searchParams.get('page');
-            if(currentPage){
+            if (currentPage) {
                 url.searchParams.delete('page'); // Khi click vào status thì xóa đi page cũ đi
             }
 
@@ -54,17 +54,93 @@ formSearch.addEventListener('submit', (e) => {
 // Pagination
 const listBtnPagination = document.querySelectorAll('[button-pagination]');
 listBtnPagination.forEach((item) => {
-    
+
     item.addEventListener('click', (e) => {
         let url = new URL(location.href);
         const destinationPage = item.getAttribute('button-pagination');
-        
-        
+
+
 
         url.searchParams.set('page', destinationPage);
-        
+
 
         location.href = url.href;
     })
 })
 //End pagination
+
+// Change status A product
+const listButtonsStatus = document.querySelectorAll('[button-change-status]');
+const formChangeStatusProduct = document.querySelector('#form-change-status-product');
+if (listButtonsStatus.length > 0) {
+    const actionBefore = formChangeStatusProduct.getAttribute('action')
+
+    listButtonsStatus.forEach((button) => {
+        button.addEventListener('click', (e) => {
+
+            const idProduct = button.getAttribute('data-id')
+            const statusProduct = button.getAttribute('data-status')
+            const newAction = actionBefore + `${statusProduct}/` + `${idProduct}?_method=PATCH`
+
+            formChangeStatusProduct.setAttribute('action', newAction)
+            formChangeStatusProduct.submit();
+        })
+    })
+}
+// End change status a product
+
+
+//Change status multiple product
+// Logic checkboxes
+const checkBoxAllProduct = document.querySelector('input[type="checkbox"][name="checkall"]');
+const listCheckBoxProduct = document.querySelectorAll('input[type="checkbox"][name="id"]')
+
+if (checkBoxAllProduct) {
+    checkBoxAllProduct.addEventListener('click', (e) => {
+        if (checkBoxAllProduct.checked == true) {
+            listCheckBoxProduct.forEach((checkbox) => {
+                checkbox.checked = true
+            })
+        }
+        else {
+            listCheckBoxProduct.forEach((checkbox) => {
+                checkbox.checked = false
+            })
+        }
+    })
+}
+
+
+if (listCheckBoxProduct.length > 0) {
+
+
+    listCheckBoxProduct.forEach((checkbox) => {
+        checkbox.addEventListener('click', (e) => {
+            let countCheckboxChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked').length;
+            if (countCheckboxChecked == listCheckBoxProduct.length) {
+                checkBoxAllProduct.checked = true
+            }
+            else {
+                checkBoxAllProduct.checked = false
+            }
+        })
+    })
+}
+
+//End logic checkboxes
+    const formChangeMulti = document.querySelector('[form-change-multi]');
+    formChangeMulti.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        const checkBoxesChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked');
+        const idsProductChecked = Array.from(checkBoxesChecked).reduce((acc,current) =>{
+            acc.push(current.value)
+            return acc;
+        },[])
+       
+        const inputIDs = document.querySelector('input[name="ids"]');
+        inputIDs.value= idsProductChecked.join(',')
+        formChangeMulti.submit();
+    })
+
+
+//End change status multiple product

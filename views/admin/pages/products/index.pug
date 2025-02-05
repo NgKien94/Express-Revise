@@ -17,10 +17,33 @@ block main
 
     .card.mb-3 
         .card-header Danh sách sản phẩm 
-        .card-body 
-            table.table.table-bordered.table-striped.mt-4
+        .card-body
+            form(
+                action=`${prefixAdmin}/products/change-multi?_method=PATCH`
+                method="POST"
+                form-change-multi
+            )
+                .d-flex.align-items-start
+                    .form-group
+                        select(name="type" class="form-control")
+                            option(value="active") Hoạt động 
+                            option(value="inactive") Dừng hoạt động 
+                    .form-group 
+                        input(
+                            type="text"
+                            name="ids"
+                            value=""
+                            class="form-control d-none"
+                        ) 
+                    button(type="submit" class="btn btn-primary") Áp dụng 
+            table(
+                class="table table-bordered table-striped mt-4"
+                checkbox-multi
+                )
                     thead
                         tr
+                            th
+                                input(type="checkbox" name="checkall")
                             th STT
                             th Hình ảnh
                             th Tiêu đề
@@ -30,6 +53,12 @@ block main
                     tbody
                         each item,index in products 
                             tr
+                                td 
+                                    input(
+                                        type="checkbox"
+                                        name="id"
+                                        value=item.id
+                                    )
                                 td #{index + objectPagination.startIndex}
                                 td
                                     img(src= item.thumbnail alt= item.title width="100" height="auto")
@@ -40,11 +69,17 @@ block main
                                         span(
                                             class="badge bg-success"
                                             style="cursor:pointer;"
+                                            data-id = item.id 
+                                            data-status = item.status
+                                            button-change-status
                                             ) Hoạt động
                                     else 
                                         span(
                                             class="badge bg-danger"
                                             style="cursor:pointer;"
+                                            data-id = item.id 
+                                            data-status = item.status
+                                            button-change-status
                                             ) Dừng hoạt động
 
                                 td
@@ -52,6 +87,11 @@ block main
                                     a.btn.btn-danger.text-white.ms-2(href="#") Xóa
 
     +pagination(objectPagination)
+    form(
+        action=`${prefixAdmin}/products/change-status-product/`
+        method="post"
+        id="form-change-status-product"
+        ) 
 
 block footerLink
     
