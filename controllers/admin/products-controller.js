@@ -105,6 +105,15 @@ module.exports.changeListProducts = async (req, res) => {
             )
 
             break;
+        case "delete-all":
+            await Product.updateMany(
+                {_id: {$in: listIds}},
+                {$set: {
+                    deleted: true,
+                    deletedAt: new Date()
+                }}
+            )
+            break;
     }
 
 
@@ -131,3 +140,4 @@ module.exports.delete_A_Product = async (req,res) =>{
 
     res.redirect(req.get('Referrer') || '/admin/products')
 }
+

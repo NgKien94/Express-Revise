@@ -32,7 +32,7 @@ Dùng body parser không còn cần thiết nữa vì đã tích hợp vào expr
 
 
 
-app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.prefixAdmin = systemConfig.prefixAdmin; // biến toàn cục trên toàn bộ dự án, có thể dùng trong view
 
 routeClient(app);
 routeAdmin(app);

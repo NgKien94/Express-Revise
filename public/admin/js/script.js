@@ -131,15 +131,34 @@ if (listCheckBoxProduct.length > 0) {
 const formChangeMulti = document.querySelector('[form-change-multi]');
 formChangeMulti.addEventListener('submit', (e) => {
     e.preventDefault();
-    const checkBoxesChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked');
-    const idsProductChecked = Array.from(checkBoxesChecked).reduce((acc, current) => {
-        acc.push(current.value)
-        return acc;
-    }, [])
+    const selectOptions = formChangeMulti.querySelector('[name="type"]')
 
-    const inputIDs = document.querySelector('input[name="ids"]');
-    inputIDs.value = idsProductChecked.join(',')
-    formChangeMulti.submit();
+    // sure selectOption ! default
+    if (!selectOptions.value) {
+        alert('Vui lòng chọn hành động áp dụng cho các sản phẩm')
+    }
+    else {
+        const checkBoxesChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked');
+
+        // sure checkboxeschecked ! 0
+        if(checkBoxesChecked){
+            const idsProductChecked = Array.from(checkBoxesChecked).reduce((acc, current) => {
+                acc.push(current.value)
+                return acc;
+            }, [])
+    
+            const inputIDs = document.querySelector('input[name="ids"]');
+            inputIDs.value = idsProductChecked.join(',')
+            
+            if(selectOptions.value == "delete-all"){
+                let isConfirm = confirm('Bạn có chắn chắn xóa các sản phẩm này')
+                if(!isConfirm) return ;
+            }
+            formChangeMulti.submit();
+        }
+    }
+
+    
 })
 
 
