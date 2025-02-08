@@ -85,7 +85,7 @@ module.exports.changeStatusProduct = async (req, res) => {
         { _id: idProduct },
         { $set: { status: responseStatus } }
     )
-
+    req.flash('success', `Cập nhật trạng thái thành công cho sản phẩm`);
     res.redirect(req.get("Referrer") || "/admin/products")
 }
 
@@ -100,14 +100,14 @@ module.exports.changeListProducts = async (req, res) => {
                 { _id: { $in: listIds } },
                 { $set: { status: "active" } }
             )
-
+            req.flash('success', `Cập nhật trạng thái thành công cho ${listIds.length} sản phẩm`);
             break;
         case "inactive":
             await Product.updateMany(
                 { _id: { $in: listIds } },
                 { $set: { status: "inactive" } }
             )
-
+            req.flash('success', `Cập nhật trạng thái thành công cho ${listIds.length} sản phẩm`);
             break;
         case "delete-all":
             await Product.updateMany(
@@ -119,6 +119,8 @@ module.exports.changeListProducts = async (req, res) => {
                     }
                 }
             )
+            req.flash('success', `Xóa thành công ${listIds.length} sản phẩm`);
+
             break;
         case "change-position":
             for (const item of listIds) {
@@ -130,6 +132,7 @@ module.exports.changeListProducts = async (req, res) => {
                     { $set: { position: newPosition } }
                 )
             }
+            req.flash('success', `Cập nhật vị trí thành công cho ${listIds.length} sản phẩm`);
             break;
     }
 

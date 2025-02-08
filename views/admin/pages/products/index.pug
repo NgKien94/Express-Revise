@@ -3,10 +3,12 @@ include ../../mixins/filter.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug 
 include ../../mixins/form-change-multi.pug
+include ../../mixins/alert.pug
 
 block main 
     h1 Product admin page
-    .card.mb-3 
+    .card.mb-3
+        +alert-success(4000) 
         .card-header Bộ lọc và tìm kiếm 
         .card-body
             .row
@@ -16,7 +18,7 @@ block main
                     +search(keyword)
                    
 
-    .card.mb-3 
+    .card.mb-3
         .card-header Danh sách sản phẩm 
         .card-body
             +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
