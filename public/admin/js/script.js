@@ -141,24 +141,38 @@ formChangeMulti.addEventListener('submit', (e) => {
         const checkBoxesChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked');
 
         // sure checkboxeschecked ! 0
-        if(checkBoxesChecked){
-            const idsProductChecked = Array.from(checkBoxesChecked).reduce((acc, current) => {
+        if (checkBoxesChecked) {
+            let idsProductChecked = Array.from(checkBoxesChecked).reduce((acc, current) => {
                 acc.push(current.value)
                 return acc;
             }, [])
-    
+
             const inputIDs = document.querySelector('input[name="ids"]');
-            inputIDs.value = idsProductChecked.join(',')
-            
-            if(selectOptions.value == "delete-all"){
-                let isConfirm = confirm('Bạn có chắn chắn xóa các sản phẩm này')
-                if(!isConfirm) return ;
+            if (selectOptions.value == "change-position") {
+                // id - position
+                idsProductChecked = Array.from(checkBoxesChecked).reduce((acc, current) => {
+                    const parentElement_inputChecked = current.closest("tr")
+                    const currentID = current.value;
+                    
+                    const currentPosition = parentElement_inputChecked.querySelector('[name="position"]').value
+                    
+                    acc.push(`${currentID}-${currentPosition}`)
+
+                    return acc
+                }, [])
             }
-            formChangeMulti.submit();
+
+            inputIDs.value = idsProductChecked.join(',')
+
+            if (selectOptions.value == "delete-all") {
+                let isConfirm = confirm('Bạn có chắn chắn xóa các sản phẩm này')
+                if (!isConfirm) return;
+            }
+             formChangeMulti.submit();
         }
     }
 
-    
+
 })
 
 

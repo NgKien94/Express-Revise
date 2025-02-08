@@ -54,7 +54,11 @@ module.exports.index = async (req, res) => {
     */
     //End pagination
 
-    const listProduct = await Product.find(findObject).limit(objectPagination.limitItems).skip(objectPagination.skipItems);
+    const listProduct = await Product
+    .find(findObject)
+    .sort({position: "desc"})
+    .limit(objectPagination.limitItems)
+    .skip(objectPagination.skipItems)
     // Trang 1 => bỏ qua 0 sản phẩm đầu
     // Trang 2 => bỏ qua (2-1 )*4 = 4 sản phẩm đầu
     // Trang 3 => bỏ qua (3-1) * 4 =8 sản phẩm đầu
@@ -107,12 +111,25 @@ module.exports.changeListProducts = async (req, res) => {
             break;
         case "delete-all":
             await Product.updateMany(
-                {_id: {$in: listIds}},
-                {$set: {
-                    deleted: true,
-                    deletedAt: new Date()
-                }}
+                { _id: { $in: listIds } },
+                {
+                    $set: {
+                        deleted: true,
+                        deletedAt: new Date()
+                    }
+                }
             )
+            break;
+        case "change-position":
+            for (const item of listIds) {
+                let [id, newPosition] = item.split('-')
+                newPosition = parseInt(newPosition)
+
+                await Product.updateOne(
+                    { _id: id },
+                    { $set: { position: newPosition } }
+                )
+            }
             break;
     }
 
@@ -122,21 +139,23 @@ module.exports.changeListProducts = async (req, res) => {
 
 
 //[DELETE] Delete A product - 
-module.exports.delete_A_Product = async (req,res) =>{
+module.exports.delete_A_Product = async (req, res) => {
     const idProduct = req.params.id
-    
-//    await Product.deleteOne( 
-//         {_id: idProduct}
-//     ) // Certainly delete product
+
+    //    await Product.deleteOne( 
+    //         {_id: idProduct}
+    //     ) // Certainly delete product
 
     await Product.updateOne(
-        {_id: idProduct},
-        {$set: {
-            deleted : true,
-            deletedAt: new Date()
-        }}
+        { _id: idProduct },
+        {
+            $set: {
+                deleted: true,
+                deletedAt: new Date()
+            }
+        }
     )
-    
+
 
     res.redirect(req.get('Referrer') || '/admin/products')
 }
