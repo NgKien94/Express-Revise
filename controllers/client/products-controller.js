@@ -3,10 +3,12 @@ const Product = require('../../models/product-model');
 module.exports = {
     index: async (req,res)=>{
 
-        const listProducts = await Product.find({
+        const listProducts = await Product
+        .find({
             deleted: false,
             status: 'active'
-        });
+        })
+        .sort({position: "desc"})
         
         const newListProducts = listProducts.map( (item) =>{
             

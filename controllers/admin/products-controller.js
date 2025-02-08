@@ -72,38 +72,41 @@ module.exports.index = async (req, res) => {
 
 
 // [PATCH] product status
-module.exports.changeStatusProduct = async (req,res) =>{
+module.exports.changeStatusProduct = async (req, res) => {
     const requestStatus = req.params.status;
     const idProduct = req.params.id;
     const responseStatus = requestStatus == "active" ? "inactive" : "active";
 
-   await Product.updateOne( 
-        {_id: idProduct},
-        {$set: {status: responseStatus}}
+    await Product.updateOne(
+        { _id: idProduct },
+        { $set: { status: responseStatus } }
     )
-    
+
     res.redirect(req.get("Referrer") || "/admin/products")
 }
 
 //[PATCH] list product status
-module.exports.changeListProducts = async (req,res)=>{
+module.exports.changeListProducts = async (req, res) => {
     const requestType = req.body.type;
     const listIds = req.body.ids.split(',');
-    
-    let newType ;
-    switch(requestType){
+
+    switch (requestType) {
         case "active":
-            newStatus = "active"
+            await Product.updateMany(
+                { _id: { $in: listIds } },
+                { $set: { status: "active" } }
+            )
+
             break;
         case "inactive":
-            newStatus = "inactive"
+            await Product.updateMany(
+                { _id: { $in: listIds } },
+                { $set: { status: "inactive" } }
+            )
+
             break;
     }
 
-    await  Product.updateMany(
-        {_id: {$in : listIds}},
-        {$set: {status: newStatus}}
-    )
 
     res.redirect(req.get('Referrer') || '/admin/products')
 }
