@@ -110,3 +110,24 @@ module.exports.changeListProducts = async (req, res) => {
 
     res.redirect(req.get('Referrer') || '/admin/products')
 }
+
+
+//[DELETE] Delete A product - 
+module.exports.delete_A_Product = async (req,res) =>{
+    const idProduct = req.params.id
+    
+//    await Product.deleteOne( 
+//         {_id: idProduct}
+//     ) // Certainly delete product
+
+    await Product.updateOne(
+        {_id: idProduct},
+        {$set: {
+            deleted : true,
+            deletedAt: new Date()
+        }}
+    )
+    
+
+    res.redirect(req.get('Referrer') || '/admin/products')
+}

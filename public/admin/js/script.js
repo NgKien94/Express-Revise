@@ -128,19 +128,43 @@ if (listCheckBoxProduct.length > 0) {
 }
 
 //End logic checkboxes
-    const formChangeMulti = document.querySelector('[form-change-multi]');
-    formChangeMulti.addEventListener('submit',(e)=>{
-        e.preventDefault();
-        const checkBoxesChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked');
-        const idsProductChecked = Array.from(checkBoxesChecked).reduce((acc,current) =>{
-            acc.push(current.value)
-            return acc;
-        },[])
-       
-        const inputIDs = document.querySelector('input[name="ids"]');
-        inputIDs.value= idsProductChecked.join(',')
-        formChangeMulti.submit();
-    })
+const formChangeMulti = document.querySelector('[form-change-multi]');
+formChangeMulti.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const checkBoxesChecked = document.querySelectorAll('input[type="checkbox"][name="id"]:checked');
+    const idsProductChecked = Array.from(checkBoxesChecked).reduce((acc, current) => {
+        acc.push(current.value)
+        return acc;
+    }, [])
+
+    const inputIDs = document.querySelector('input[name="ids"]');
+    inputIDs.value = idsProductChecked.join(',')
+    formChangeMulti.submit();
+})
 
 
 //End change status multiple product
+
+
+//Delete a product
+const listButtonDelProduct = document.querySelectorAll('[button-delete]')
+if (listButtonDelProduct.length > 0) {
+    const formDelAProduct = document.querySelector('#form-delete-A-product')
+    const currentAction = formDelAProduct.getAttribute('action');
+    listButtonDelProduct.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            let isDelete = confirm('Bạn có chắc chắn muốn xóa sản phẩm này ? ')
+            if (isDelete == true) {
+                const currentIdProduct = button.getAttribute('data-id')
+                const newAction = currentAction + `${currentIdProduct}?_method=DELETE`
+
+                formDelAProduct.action = newAction
+                formDelAProduct.submit()
+            }
+
+        })
+    })
+}
+
+
+//End delete  a product
