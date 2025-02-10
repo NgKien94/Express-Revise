@@ -16,5 +16,11 @@ route.patch('/change-multi',controller.changeListProducts)
 //DELETE - Delete A Product
 route.delete('/delete-product/:id',controller.delete_A_Product)
 
+//GET - View UI Create A Product
+route.get('/createProduct',controller.viewCreate_A_Product)
+
+//POST - Create A Product
+route.post('/create',controller.createProduct)
+
 
 module.exports = route;
