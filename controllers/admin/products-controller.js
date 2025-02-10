@@ -172,18 +172,30 @@ module.exports.viewCreate_A_Product = (req,res) =>{
 
 //[POST]  Create A Product 
 module.exports.createProduct = async (req,res) =>{
+    console.log(req.file)
     req.body.price = parseFloat(req.body.price)
     req.body.discountPercentage = parseFloat(req.body.discountPercentage)
     req.body.stock = parseInt(req.body.stock)
+
+    //handle position
     if(req.body.position){
         req.body.position = parseInt(req.body.position)
     }
     else{
         req.body.position = await Product.countDocuments() +1
     }
-    
+    //end handle position
+
+    // handle file upload
+    if(req.file){
+        req.body.thumbnail = `/uploads/${req.file.filename}`
+    }
+    //end handle file upload
+
     const newProduct = new Product(req.body)
     await newProduct.save()
-    // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
+    // // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
+  
+    
     res.redirect('/admin/products')
 }
