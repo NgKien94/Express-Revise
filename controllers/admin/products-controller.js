@@ -2,6 +2,7 @@ const Product = require('../../models/product-model')
 const filterHelpers = require('../../helpers/filterStatus');
 const searchHelpers = require('../../helpers/search')
 const paginationHelpers = require('../../helpers/pagination')
+const systemConfig = require('../../configs/system')
 
 // [GET] List product
 module.exports.index = async (req, res) => {
@@ -198,11 +199,55 @@ module.exports.createProduct = async (req, res) => {
         await newProduct.save()
         // // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
 
-        req.flash('success',"Tạo sản phẩm thành công")
+        req.flash('success', "Tạo sản phẩm thành công")
         res.redirect('/admin/products')
     } catch (error) {
         console.log(error)
-        req.flash('error',"Có lỗi xảy ra khi tạo sản phẩm")
+        req.flash('error', "Có lỗi xảy ra khi tạo sản phẩm")
         res.redirect('/admin/products')
     }
+}
+
+//[GET] View UI Edit a Product
+module.exports.viewEdit_A_Product = async (req, res) => {
+    const id = req.params.id
+
+    const product = await Product.findOne({ _id: id })
+
+    res.render('admin/pages/products/editProduct.pug', {
+        pageTitle: 'Chỉnh sửa sản phẩm',
+        product: product
+    })
+}
+
+//[PATCH] Edit A Product
+module.exports.editProduct = async (req, res) => {
+
+    try {
+        const id = req.params.id
+        req.body.price = parseFloat(req.body.price)
+        req.body.discountPercentage = parseFloat(req.body.discountPercentage)
+        req.body.stock = parseInt(req.body.stock)
+        req.body.position = parseInt(req.body.position)
+
+        // handle file upload
+        if (req.file) {
+            req.body.thumbnail = `/uploads/${req.file.filename}`
+        }
+        //end handle file upload
+
+        await Product.updateOne(
+            {_id: id},
+            req.body
+        )
+   
+
+        req.flash('success', "Chỉnh sửa sản phẩm thành công")
+        res.redirect(req.get('Referrer') || `${systemConfig.prefixAdmin}/products`)
+    } catch (error) {
+        console.log(error)
+        req.flash('error', "Có lỗi xảy ra khi chỉnh sửa sản phẩm")
+        res.redirect(`${systemConfig.prefixAdmin}/products`)
+    }
+
 }
