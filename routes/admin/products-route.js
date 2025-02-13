@@ -6,7 +6,7 @@ const route = express.Router();
 
 
 const upload = multer({ storage: multerStorageHelper() })
-
+const validateProduct = require('../../validates/admin/validate-product')
 //GET PRODUCTS
 route.get('/', controller.index)
 
@@ -25,7 +25,10 @@ route.delete('/delete-product/:id',controller.delete_A_Product)
 route.get('/createProduct',controller.viewCreate_A_Product)
 
 //POST - Create A Product
-route.post('/create',upload.single('thumbnail'),controller.createProduct)
+route.post('/create',
+    upload.single('thumbnail'),
+    validateProduct.createProduct,
+    controller.createProduct)
 
 
 module.exports = route;

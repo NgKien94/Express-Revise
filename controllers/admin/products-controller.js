@@ -55,10 +55,10 @@ module.exports.index = async (req, res) => {
     //End pagination
 
     const listProduct = await Product
-    .find(findObject)
-    .sort({position: "desc"})
-    .limit(objectPagination.limitItems)
-    .skip(objectPagination.skipItems)
+        .find(findObject)
+        .sort({ position: "desc" })
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skipItems)
     // Trang 1 => bỏ qua 0 sản phẩm đầu
     // Trang 2 => bỏ qua (2-1 )*4 = 4 sản phẩm đầu
     // Trang 3 => bỏ qua (3-1) * 4 =8 sản phẩm đầu
@@ -164,38 +164,45 @@ module.exports.delete_A_Product = async (req, res) => {
 }
 
 // [GET] View UI Create A Product
-module.exports.viewCreate_A_Product = (req,res) =>{
-    res.render('admin/pages/products/createProduct.pug',{
+module.exports.viewCreate_A_Product = (req, res) => {
+    res.render('admin/pages/products/createProduct.pug', {
         pageTitle: 'Tạo mới sản phẩm'
     })
 }
 
 //[POST]  Create A Product 
-module.exports.createProduct = async (req,res) =>{
-    console.log(req.file)
-    req.body.price = parseFloat(req.body.price)
-    req.body.discountPercentage = parseFloat(req.body.discountPercentage)
-    req.body.stock = parseInt(req.body.stock)
+module.exports.createProduct = async (req, res) => {
 
-    //handle position
-    if(req.body.position){
-        req.body.position = parseInt(req.body.position)
-    }
-    else{
-        req.body.position = await Product.countDocuments() +1
-    }
-    //end handle position
+    try {
 
-    // handle file upload
-    if(req.file){
-        req.body.thumbnail = `/uploads/${req.file.filename}`
-    }
-    //end handle file upload
+        req.body.price = parseFloat(req.body.price)
+        req.body.discountPercentage = parseFloat(req.body.discountPercentage)
+        req.body.stock = parseInt(req.body.stock)
 
-    const newProduct = new Product(req.body)
-    await newProduct.save()
-    // // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
-  
-    
-    res.redirect('/admin/products')
+        //handle position
+        if (req.body.position) {
+            req.body.position = parseInt(req.body.position)
+        }
+        else {
+            req.body.position = await Product.countDocuments() + 1
+        }
+        //end handle position
+
+        // handle file upload
+        if (req.file) {
+            req.body.thumbnail = `/uploads/${req.file.filename}`
+        }
+        //end handle file upload
+
+        const newProduct = new Product(req.body)
+        await newProduct.save()
+        // // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
+
+        req.flash('success',"Tạo sản phẩm thành công")
+        res.redirect('/admin/products')
+    } catch (error) {
+        console.log(error)
+        req.flash('error',"Có lỗi xảy ra khi tạo sản phẩm")
+        res.redirect('/admin/products')
+    }
 }

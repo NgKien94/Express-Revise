@@ -1,10 +1,12 @@
 extends ../../layouts/default.pug 
+include ../../mixins/alert.pug
 
 block headerLink 
     link(rel="stylesheet", href="/admin/css/style.css")
     link(rel="stylesheet" ,href="/admin/css/createProduct.css")
 
-block main 
+block main
+    +alert-error(4000)
     h1(class="mb-4") Thêm mới sản phẩm 
     form(
         action=`${prefixAdmin}/products/create`
