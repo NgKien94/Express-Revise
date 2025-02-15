@@ -251,3 +251,17 @@ module.exports.editProduct = async (req, res) => {
     }
 
 }
+
+//[GET]  View  a product 
+module.exports.detail = async (req,res) =>{
+    const id = req.params.id;
+    let objectFind = {
+        _id: id,
+        deleted: false
+    }
+    const product  = await Product.findOne(objectFind)
+    res.render("admin/pages/products/detail.pug",{
+        pageTitle: product.title,
+        product: product
+    })
+}

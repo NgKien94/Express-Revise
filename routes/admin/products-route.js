@@ -41,4 +41,7 @@ route.patch('/editProduct/:id',
     upload.single('thumbnail'),
     controller.editProduct)
 
+// GET - View detail product
+route.get("/detail/:id",controller.detail)
+
 module.exports = route;
