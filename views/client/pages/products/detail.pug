@@ -1,0 +1,26 @@
+extends ../../layouts/default.pug 
+
+block headerLink 
+    link(rel="stylesheet", href="/css/detailProduct.css")
+
+block main 
+    div(class="product-container")
+        if(product.title)
+            h1 #{product.title}
+
+        if(product.thumbnail)
+            div(class="product-thumbnail")
+                img(src=product.thumbnail, alt=product.title)
+
+        if(product.price)
+            p(class="product-price") Giá sản phẩm: <b>#{product.price}$</b>
+
+        if(product.discountPercentage)
+            p(class="product-discount") Giảm giá: <b>#{product.discountPercentage}%</b>
+
+        if(product.stock) 
+            p Còn lại: <b>#{product.stock}</b> sản phẩm 
+
+        if(product.description)
+            p #{product.description}
+
