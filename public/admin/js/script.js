@@ -222,3 +222,40 @@ if(showAlert) {
 }
 
 //End logic close alert message
+
+
+
+//Sort product
+
+const sort = document.querySelector('[sort]');
+if(sort){
+    let url = new URL(location.href)
+    const sortSelect = sort.querySelector('[sort-select]')
+    const sortClear = sort.querySelector('[sort-clear]')
+
+    sortSelect.addEventListener('change',(e)=>{
+        const [sortKey,sortValue] = e.target.value.split('-')
+        
+        url.searchParams.set('sortKey',sortKey)
+        url.searchParams.set('sortValue',sortValue)
+       
+        location.href = url.href;
+    })
+
+    sortClear.addEventListener('click',(e)=>{
+        url.searchParams.delete('sortKey');
+        url.searchParams.delete('sortValue')
+        location.href = url.href;
+    })
+
+    //Selected option
+    const sortKey = url.searchParams.get('sortKey');
+    const sortValue = url.searchParams.get('sortValue');
+
+    const stringSort = `${sortKey}-${sortValue}`
+    sortSelect.querySelector(`option[value="${stringSort}"]`).selected = true;
+    
+    //End selected option
+
+}
+//End sort product

@@ -30,11 +30,17 @@ module.exports.index = async (req, res) => {
     }
     //End Search
 
+    //Sort product
+    const sortObject = {}
+    if(req.query.sortKey && req.query.sortValue){
+        sortObject[req.query.sortKey] = req.query.sortValue
+    }
+    else sortObject.position = "desc" // default sort
+
+    //End sort product
+
 
     // Pagination
-
-
-
 
     // Hiển thị số trang
 
@@ -57,7 +63,7 @@ module.exports.index = async (req, res) => {
 
     const listProduct = await Product
         .find(findObject)
-        .sort({ position: "desc" })
+        .sort(sortObject)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skipItems)
     // Trang 1 => bỏ qua 0 sản phẩm đầu
