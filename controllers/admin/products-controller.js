@@ -189,14 +189,11 @@ module.exports.createProduct = async (req, res) => {
         }
         //end handle position
 
-        // handle file upload
-        if (req.file) {
-            req.body.thumbnail = `/uploads/${req.file.filename}`
-        }
-        //end handle file upload
+      
 
         const newProduct = new Product(req.body)
         await newProduct.save()
+       
         // // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
 
         req.flash('success', "Tạo sản phẩm thành công")
