@@ -233,11 +233,6 @@ module.exports.editProduct = async (req, res) => {
         req.body.stock = parseInt(req.body.stock)
         req.body.position = parseInt(req.body.position)
 
-        // handle file upload
-        if (req.file) {
-            req.body.thumbnail = `/uploads/${req.file.filename}`
-        }
-        //end handle file upload
 
         await Product.updateOne(
             {_id: id},

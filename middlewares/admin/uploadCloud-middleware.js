@@ -31,9 +31,16 @@ module.exports.uploadCloud = (req, res, next) => {
         };
 
         async function upload(req) {
-            let result = await streamUpload(req);
-            req.body[req.file.fieldname] = result.secure_url;
-            next();
+            try{
+                let result = await streamUpload(req);
+                req.body[req.file.fieldname] = result.secure_url;
+
+            }catch(error){
+                console.log("Error upload file to Cloudinary: ",error)
+            }finally{
+                next();
+            }
+           
         }
         upload(req);
     }
