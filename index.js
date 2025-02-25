@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express')
 
-
+const path = require('path')
 const routeClient = require('./routes/client/index-route');
 const routeAdmin = require("./routes/admin/index-route");
 const systemConfig = require('./configs/system')
@@ -47,6 +47,10 @@ app.use(session({
   cookie: { maxAge: 60000 } // Thời gian tồn tại của cookie (60000ms = 1 phút)
 }));
 app.use(flash());
+
+// Tiny MCE - Editor input fields
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+//End Tiny MCE- Editor input fields
 
 routeClient(app);
 routeAdmin(app);
