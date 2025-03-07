@@ -6,8 +6,6 @@ block headerLink
     link(rel="stylesheet", href="/admin/css/style.css")
 block main
     h1 Category
-    +alert-error(4000)
-    +alert-success(4000)   
     .card.mb-3
         +alert-error(4000)
         +alert-success(4000) 
@@ -39,3 +37,5 @@ block main
                     tbody
                         if(records)
                             +table-tree(records)
+block footerLink
+    script(src="/admin/js/script-indexCategory.js") 

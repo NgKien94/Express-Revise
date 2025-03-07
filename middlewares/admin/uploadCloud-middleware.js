@@ -1,5 +1,6 @@
 const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier')
+const systemConfig = require('../../configs/system')
 
 // Config cloudinary
 
@@ -11,7 +12,7 @@ cloudinary.config({
 
 //End config cloudinary
 
-module.exports.uploadCloud = (req, res, next) => {
+module.exports.uploadCloud = async (req, res, next) => {
     // trường hợp có file được upload 
     if (req.file) {
         let streamUpload = (req) => {
@@ -35,15 +36,18 @@ module.exports.uploadCloud = (req, res, next) => {
             try{
                 let result = await streamUpload(req);
                 req.body[req.file.fieldname] = result.secure_url;
-
+                next();
+                return;
             }catch(error){
                 console.log("Error upload file to Cloudinary: ",error)
-            }finally{
-                next();
+                req.flash('error',"Có lỗi xảy ra khi upload ảnh, vui lòng thử lại sau");
+                res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+                return;
             }
            
         }
-        upload(req);
+        await  upload(req);
+        
     }
     else {
         // trường hợp không có file upload
