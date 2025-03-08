@@ -41,12 +41,12 @@ mixin table-tree(records,level=1)
             td
                 a(
                     class="btn btn-secondary me-3"
-                    href=`${prefixAdmin}/products-category/detail/:${item.id}`
+                    href=`${prefixAdmin}/products-category/detail/${item.id}`
                     ) Chi tiết
 
                 a(
                     class="btn btn-warning text-white"
-                    href=`${prefixAdmin}/products-category/edit/:${item.id}`
+                    href=`${prefixAdmin}/products-category/edit/${item.id}`
                     ) Sửa
 
                 button(
