@@ -201,7 +201,7 @@ module.exports.createProduct = async (req, res) => {
         }
         //end handle position
 
-        if(!req.file){
+        if (!req.file) {
             req.body.thumbnail = ""
         }
 
@@ -222,14 +222,23 @@ module.exports.createProduct = async (req, res) => {
 
 //[GET] View UI Edit a Product
 module.exports.viewEdit_A_Product = async (req, res) => {
-    const id = req.params.id
+    try {
+        const id = req.params.id
 
-    const product = await Product.findOne({ _id: id })
+        const product = await Product.findOne({ _id: id })
+        const records = await ProductCategory.find({ deleted: false })
+        const newRecords = createTreeHelper.tree(records)
 
-    res.render('admin/pages/products/editProduct.pug', {
-        pageTitle: 'Chỉnh sửa sản phẩm',
-        product: product
-    })
+        res.render('admin/pages/products/editProduct.pug', {
+            pageTitle: 'Chỉnh sửa sản phẩm',
+            product: product,
+            records: newRecords
+        })
+    } catch (error) {
+        console.log(error)
+        req.flash('error', "Có lỗi xảy ra khi chỉnh sửa sản phẩm")
+        res.redirect(`${systemConfig.prefixAdmin}/products`)
+    }
 }
 
 //[PATCH] Edit A Product
@@ -261,14 +270,20 @@ module.exports.editProduct = async (req, res) => {
 
 //[GET]  View  a product 
 module.exports.detail = async (req, res) => {
-    const id = req.params.id;
-    let objectFind = {
-        _id: id,
-        deleted: false
+    try {
+        const id = req.params.id;
+        let objectFind = {
+            _id: id,
+            deleted: false
+        }
+        const product = await Product.findOne(objectFind)
+        res.render("admin/pages/products/detail.pug", {
+            pageTitle: product.title,
+            product: product
+        })
+    } catch (error) {
+        console.log(error)
+        req.flash('error', "Tài nguyên không tồn tại")
+        res.redirect(`${systemConfig.prefixAdmin}/products`)
     }
-    const product = await Product.findOne(objectFind)
-    res.render("admin/pages/products/detail.pug", {
-        pageTitle: product.title,
-        product: product
-    })
 }
