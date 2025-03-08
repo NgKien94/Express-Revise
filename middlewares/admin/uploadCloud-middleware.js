@@ -41,7 +41,7 @@ module.exports.uploadCloud = async (req, res, next) => {
             }catch(error){
                 console.log("Error upload file to Cloudinary: ",error)
                 req.flash('error',"Có lỗi xảy ra khi upload ảnh, vui lòng thử lại sau");
-                res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+                res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
                 return;
             }
            

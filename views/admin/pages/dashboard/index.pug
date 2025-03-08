@@ -1,4 +1,5 @@
 extends ../../layouts/default.pug 
+include ../../mixins/alert.pug
 //- include ../../mixins/fakeTitle.pug 
 
 block headerLink 
@@ -6,3 +7,7 @@ block headerLink
 
 block main 
     h1 Tổng quan Admin
+    +alert-success(4000)
+    +alert-error(4000)
+block footerLink 
+    script(src="/admin/js/script-dashboard.js") 

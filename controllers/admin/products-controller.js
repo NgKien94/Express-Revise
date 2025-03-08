@@ -1,7 +1,9 @@
 const Product = require('../../models/product-model')
+const ProductCategory = require('../../models/product-category-model')
 const filterHelpers = require('../../helpers/filterStatus');
 const searchHelpers = require('../../helpers/search')
 const paginationHelpers = require('../../helpers/pagination')
+const createTreeHelper = require('../../helpers/createTree')
 const systemConfig = require('../../configs/system')
 
 // [GET] List product
@@ -32,7 +34,7 @@ module.exports.index = async (req, res) => {
 
     //Sort product
     const sortObject = {}
-    if(req.query.sortKey && req.query.sortValue){
+    if (req.query.sortKey && req.query.sortValue) {
         sortObject[req.query.sortKey] = req.query.sortValue
     }
     else sortObject.position = "desc" // default sort
@@ -171,9 +173,13 @@ module.exports.delete_A_Product = async (req, res) => {
 }
 
 // [GET] View UI Create A Product
-module.exports.viewCreate_A_Product = (req, res) => {
+module.exports.viewCreate_A_Product = async (req, res) => {
+    const records = await ProductCategory.find({ deleted: false })
+    const newRecords = createTreeHelper.tree(records)
+
     res.render('admin/pages/products/createProduct.pug', {
-        pageTitle: 'Tạo mới sản phẩm'
+        pageTitle: 'Tạo mới sản phẩm',
+        records: newRecords
     })
 }
 
@@ -195,11 +201,14 @@ module.exports.createProduct = async (req, res) => {
         }
         //end handle position
 
-      
+        if(!req.file){
+            req.body.thumbnail = ""
+        }
+
 
         const newProduct = new Product(req.body)
         await newProduct.save()
-       
+
         // // await Product.create(req.body) // có thể dùng bằng create (phương thức tĩnh của mongoose) hoặc save
 
         req.flash('success', "Tạo sản phẩm thành công")
@@ -235,10 +244,10 @@ module.exports.editProduct = async (req, res) => {
 
 
         await Product.updateOne(
-            {_id: id},
+            { _id: id },
             req.body
         )
-   
+
 
         req.flash('success', "Chỉnh sửa sản phẩm thành công")
         res.redirect(req.get('Referrer') || `${systemConfig.prefixAdmin}/products`)
@@ -251,14 +260,14 @@ module.exports.editProduct = async (req, res) => {
 }
 
 //[GET]  View  a product 
-module.exports.detail = async (req,res) =>{
+module.exports.detail = async (req, res) => {
     const id = req.params.id;
     let objectFind = {
         _id: id,
         deleted: false
     }
-    const product  = await Product.findOne(objectFind)
-    res.render("admin/pages/products/detail.pug",{
+    const product = await Product.findOne(objectFind)
+    res.render("admin/pages/products/detail.pug", {
         pageTitle: product.title,
         product: product
     })
