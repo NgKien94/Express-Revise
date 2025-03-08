@@ -11,4 +11,11 @@ route.get('/create',controller.viewCreate)
 //[POST] /admin/roles/create
 route.post('/create',controller.create)
 
+//[GET] /admin/roles/edit/:id
+route.get('/edit/:id',controller.viewEdit)
+
+
+//[PATCH] /admin/roles/edit/:id
+route.patch('/edit/:id',controller.edit)
+
 module.exports = route;
