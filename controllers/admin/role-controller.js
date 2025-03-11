@@ -1,3 +1,4 @@
+const { response } = require('express')
 const systemConfig = require('../../configs/system')
 const Role = require('../../models/role-model')
 
@@ -56,4 +57,24 @@ module.exports.edit = async (req, res) => {
     await Role.updateOne({ _id: id }, req.body)
     req.flash('success', "Chỉnh sửa nhóm quyền thành công");
     res.redirect(req.get('Referrer') || `${systemConfig.prefixAdmin}/roles`)
+}
+
+//[GET] /admin/roles/permissions
+module.exports.viewPermissions = async (req,res) =>{
+    const records = await Role.find({deleted: false});
+    console.log(records);
+    res.render('admin/pages/roles/permissions.pug',{
+        pageTitle: "Phân quyền",
+        records: records
+    })
+}
+
+//[PATCH] /admin/roles/permissions
+module.exports.editPermissions = async (req,res) =>{
+    const data = JSON.parse(req.body.permissions);
+    data.forEach( async (item) =>{
+        await Role.updateOne( {_id: item.id},{permissions: item.permissions});
+    })
+    req.flash('success', "Cập nhật phân quyền thành công");
+    res.redirect(req.get('Referrer') || `${systemConfig.prefixAdmin}/roles/permissions`)
 }
