@@ -20,7 +20,7 @@ if (showAlert) {
 
 
 //Preview Image upload file
-const formEditProduct = document.querySelector('#form-create-accounts')
+const formEditProduct = document.querySelector('#form-accounts')
 if(formEditProduct){
 
     const inputPreview = formEditProduct.querySelector('[upload-image-input')

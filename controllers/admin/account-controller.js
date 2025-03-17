@@ -56,3 +56,57 @@ module.exports.createAccount = async (req,res) => {
 
    
 }
+
+
+module.exports.viewEdit = async (req,res) => {
+    try{
+        const data = await Account.findOne({
+            deleted: false,
+            _id: req.params.id
+        })
+    
+        const roles = await Role.find({
+            deleted: false
+        })
+    
+        res.render('admin/pages/accounts/edit.pug', {
+            pageTitle: 'Cập nhật tài khoản',
+            data: data,
+            roles: roles
+        })
+    }catch(error){
+        req.flash('error','Tài nguyên không tồn tại')
+        res.redirect(`${systemConfig.prefixAdmin}/pages/accounts`)
+
+    }
+}
+
+
+module.exports.editAccount = async (req,res) => {
+    const id = req.params.id;
+
+    const isExistEmail = await Account.findOne({
+        _id : {$ne : id},
+        email: req.body.email,
+        deleted: false
+    })
+
+    if(!isExistEmail){
+
+        if(req.body.password){
+            req.body.password = md5(req.body.password);
+        }
+        else{
+            delete req.body.password
+        }
+        console.log("records update: ",req.body)
+
+        await Account.updateOne( {_id: id},req.body)
+        req.flash('success','Cập nhật tài khoản thành công')
+        res.redirect(req.get('Referrer') || `${systemConfig.prefixAdmin}/accounts`)
+    }
+    else{
+        req.flash('error','Email đã tồn tại')
+        res.redirect(req.get('Referrer') || `${systemConfig.prefixAdmin}/accounts`)
+    }
+}

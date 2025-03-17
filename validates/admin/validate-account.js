@@ -24,3 +24,25 @@ module.exports.createAccount = (req,res,next) =>{
     //end check title
     
 }
+
+
+module.exports.editAccount = (req,res,next) =>{
+    
+    if(!req.body.fullName){
+        req.flash('error',"Vui lòng nhập tên đầy đủ")
+        res.redirect(`${systemConfig.prefixAdmin}/accounts/create`)
+        return ;
+    }
+
+    if(!req.body.email){
+        req.flash('error',"Vui lòng nhập email")
+        res.redirect(`${systemConfig.prefixAdmin}/accounts/create`)
+        return ;
+    }
+
+   
+
+    next()
+    //end check title
+    
+}
