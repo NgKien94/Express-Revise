@@ -5,37 +5,41 @@ include ../../mixins/table-tree.pug
 block headerLink 
     link(rel="stylesheet", href="/admin/css/style.css")
 block main
-    h1 Category
-    .card.mb-3
-        +alert-error(4000)
-        +alert-success(4000) 
-        .card-header Category of products
-        .card-body
-            .row 
-                .col-8 
+    if(role.permissions.includes("products-category_view"))
+        h1 Category
+        .card.mb-3
+            +alert-error(4000)
+            +alert-success(4000) 
+            .card-header Category of products
+            .card-body
+                .row 
+                    .col-8 
 
-                .col-4 
-                    a(
-                        href=`${prefixAdmin}/products-category/viewCreate-category`
-                        class="btn btn-outline-success"
-                    ) + Thêm mới
+                    .col-4
+                        if(role.permissions.includes("products-category_create")) 
+                            a(
+                                href=`${prefixAdmin}/products-category/viewCreate-category`
+                                class="btn btn-outline-success"
+                            ) + Thêm mới
 
-            table(
-                class="table table-bordered table-striped mt-4"
-                checkbox-multi
-                )
-                    thead
-                        tr
-                            th
-                                input(type="checkbox" name="checkall")
-                            th STT
-                            th Hình ảnh
-                            th Tiêu đề
-                            th Thay đổi vị trí
-                            th Trạng thái
-                            th Hành động
-                    tbody
-                        if(records)
-                            +table-tree(records)
+                table(
+                    class="table table-bordered table-striped mt-4"
+                    checkbox-multi
+                    )
+                        thead
+                            tr
+                                th
+                                    input(type="checkbox" name="checkall")
+                                th STT
+                                th Hình ảnh
+                                th Tiêu đề
+                                th Thay đổi vị trí
+                                th Trạng thái
+                                th Hành động
+                        tbody
+                            if(records)
+                                +table-tree(records)
+    else
+        h1 Bạn không có quyền truy cập trang này
 block footerLink
     script(src="/admin/js/script-indexCategory.js") 

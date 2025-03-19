@@ -7,92 +7,95 @@ block headerLink
     link(rel="stylesheet", href="/admin/css/createCategory.css")
 
 block main
-    +alert-error(4000)
-    h1(class="mb-4") Thêm mới danh mục sản phẩm
-    form(
-        action=`${prefixAdmin}/products-category/create-category`
-        id="form-create-category"
-        method="POST"
-        enctype="multipart/form-data"
-    )
-        div( class="form-group" )
-            label(for="title") Tiêu đề 
-            input(
-                type="text"
-                class="form-control tiny-mce-title"
-                id="title"
-                name="title"
-                required 
-            )
-        div( class="form-group" )
-            label(for="parent_id") Danh mục cha
-            select(
-                name="parent_id" 
-                id="parent_id" 
-                class="form-control"
+    if(role.permissions.includes("products-category_create"))
+        +alert-error(4000)
+        h1(class="mb-4") Thêm mới danh mục sản phẩm
+        form(
+            action=`${prefixAdmin}/products-category/create-category`
+            id="form-create-category"
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div( class="form-group" )
+                label(for="title") Tiêu đề 
+                input(
+                    type="text"
+                    class="form-control tiny-mce-title"
+                    id="title"
+                    name="title"
+                    required 
                 )
-                option(value="") -- Chọn danh mục-- 
-                if(records)
-                    +select-tree(records)
-        div( class="form-group" )
-            label(for="desc") Mô tả
-            textarea(
-                class="form-control tiny-mce-textarea"
-                id="desc"
-                name="description"
-                row="5"
-            )
-        
- 
-        div( class="form-group preview" )
-            label(for="thumbnail") Ảnh
-            input(
-                type="file"
-                class="form-control-file"
-                id="thumbnail"
-                name="thumbnail"
-                accept="image/*"
-                preview-input-image
-            )
-            br
-            img(
-                src=""
-                preview-image
-            )
-        div( class="form-group" )
-            label(for="position") Vị trí
-            input(
-                type="number"
-                class="form-control"
-                id="position"
-                name="position"
-                placeHolder ="Tự động tăng"
-                min="1"
-            )
-        div( class="form-group form-check form-check-inline" )
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusActive"
-                name="status"
-                value="active"
-                checked
-            )
-            label(for="statusActive" class="form-check-label") Hoạt động 
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio"
-                class="form-check-input"
-                id="statusInActive"
-                name="status"
-                value="inactive"
-            )
-            label(for="statusInActive" class="form-check-label") Dừng hoạt động
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            )   Tạo mới
+            div( class="form-group" )
+                label(for="parent_id") Danh mục cha
+                select(
+                    name="parent_id" 
+                    id="parent_id" 
+                    class="form-control"
+                    )
+                    option(value="") -- Chọn danh mục-- 
+                    if(records)
+                        +select-tree(records)
+            div( class="form-group" )
+                label(for="desc") Mô tả
+                textarea(
+                    class="form-control tiny-mce-textarea"
+                    id="desc"
+                    name="description"
+                    row="5"
+                )
+            
+    
+            div( class="form-group preview" )
+                label(for="thumbnail") Ảnh
+                input(
+                    type="file"
+                    class="form-control-file"
+                    id="thumbnail"
+                    name="thumbnail"
+                    accept="image/*"
+                    preview-input-image
+                )
+                br
+                img(
+                    src=""
+                    preview-image
+                )
+            div( class="form-group" )
+                label(for="position") Vị trí
+                input(
+                    type="number"
+                    class="form-control"
+                    id="position"
+                    name="position"
+                    placeHolder ="Tự động tăng"
+                    min="1"
+                )
+            div( class="form-group form-check form-check-inline" )
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusActive"
+                    name="status"
+                    value="active"
+                    checked
+                )
+                label(for="statusActive" class="form-check-label") Hoạt động 
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusInActive"
+                    name="status"
+                    value="inactive"
+                )
+                label(for="statusInActive" class="form-check-label") Dừng hoạt động
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                )   Tạo mới
+    else 
+        h1 Bạn không có quyền truy cập trang này
 block footerLink
     script(src="/admin/js/script-createCategory.js")
     script(
