@@ -8,7 +8,7 @@ const systemConfig = require('./configs/system')
 const methodOverride = require('method-override')
 const flash = require('express-flash')
 const session = require('express-session')
-
+const cookieParser = require('cookie-parser')
 const testDB = require('./configs/test-database')
 
 
@@ -40,6 +40,7 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin; // biến toàn cục trên t
   Hiển thị thông báo khi bằng session
   Example: hiển thị thông báo lỗi đăng nhập, đăng nhập thành công, cập nhật dữ liệu thành công.....
 */
+app.use(cookieParser("ABCDEFK"))
 app.use(session({
   secret: 'ABC123', // Chìa khóa bí mật cho session
   resave: false, // Không lưu lại phiên nếu không có thay đổi
