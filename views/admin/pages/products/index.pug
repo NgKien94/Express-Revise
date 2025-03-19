@@ -4,6 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug 
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
+include ../../mixins/moment.pug
 
 block headerLink  
     link(rel="stylesheet", href="/admin/css/style.css")
@@ -71,6 +72,7 @@ block main
                                 th Giá
                                 th Thay đổi vị trí
                                 th Trạng thái
+                                th Người tạo
                                 th Hành động
                         tbody
                             each item,index in products 
@@ -127,7 +129,10 @@ block main
                                                     data-id = item.id 
                                                     data-status = item.status
                                                     ) Dừng hoạt động
-
+                                    td
+                                        p #{item.accountFullName} 
+                                        p 
+                                            +formatDate(item.createdBy.createdAt)
                                     td
                                         a(
                                             class="btn btn-secondary me-3"

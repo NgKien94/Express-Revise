@@ -9,6 +9,7 @@ const methodOverride = require('method-override')
 const flash = require('express-flash')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
+const moment = require('moment')
 const testDB = require('./configs/test-database')
 
 
@@ -35,7 +36,7 @@ Dùng body parser không còn cần thiết nữa vì đã tích hợp vào expr
 */
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin; // biến toàn cục trên toàn bộ dự án, có thể dùng trong view
-
+app.locals.moment = moment;
 /* 
   Hiển thị thông báo khi bằng session
   Example: hiển thị thông báo lỗi đăng nhập, đăng nhập thành công, cập nhật dữ liệu thành công.....
