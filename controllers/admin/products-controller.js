@@ -133,7 +133,10 @@ module.exports.changeListProducts = async (req, res) => {
                 {
                     $set: {
                         deleted: true,
-                        deletedAt: new Date()
+                        deletedBy: {
+                            account_id : res.locals.user.id,
+                            deletedAt: new Date()
+                        }
                     }
                 }
             )
@@ -172,7 +175,10 @@ module.exports.delete_A_Product = async (req, res) => {
         {
             $set: {
                 deleted: true,
-                deletedAt: new Date()
+                deletedBy: {
+                    account_id: res.locals.user.id,
+                    deletedAt: new Date()
+                }
             }
         }
     )
